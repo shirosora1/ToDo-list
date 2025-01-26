@@ -8,11 +8,14 @@ public class ToDoList {
         toDo.add("Hang laundry to dry");
         toDo.add("Clean kitchen");
 
-        int number = 0;
+        Handler.loopToDo(toDo);
 
-        for (int i = 0; i < toDo.size(); i++) {
-            number++;
-            System.out.println(number + ". " + toDo.get(i));
-        }
+        toDo.set(0, "Make a brew");
+
+        // separates the before and after to-do list
+        System.out.println();
+
+        Handler.loopToDo(toDo);
+
     }
 }
