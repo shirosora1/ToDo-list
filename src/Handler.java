@@ -8,9 +8,11 @@ public class Handler {
         // adds an incrementing number beside the to-do item
         int number = 0;
 
-        for (int i = 0; i < toDo.size(); i++) {
+        // Enhanced for loop: 's' represents the data itself (e.g., "Cook dinner")
+        // from the list, rather than an index
+        for (String s : toDo) {
             number++;
-            System.out.println(number + ". " + toDo.get(i));
+            System.out.println(number + ". " + s);
         }
     }
 }
