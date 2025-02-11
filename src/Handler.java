@@ -2,59 +2,71 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Handler {
-   private static Scanner scanner = new Scanner(System.in);
+   private final Scanner scanner;
+   private final HashMap<Integer, String> toDo;
+   private Integer taskId = 1;
 
-    public static int menu(Scanner scanner) {
-
-        System.out.println("""
-                What would you like to do?
-                [1] Add task
-                [2] Update task
-                [3] Remove task
-                [4] Exit?""");
-
-        System.out.print("Please enter your choice: ");
-        int menuChoice = scanner.nextInt();
-        scanner.nextLine();
-
-        return menuChoice;
+    public Handler() {
+        this.toDo = new HashMap<>();
+        this.scanner = new Scanner(System.in);
     }
 
-    public static HashMap<Integer, String> taskInput(Scanner scanner) {
+    public void menu() {
+        int menuChoice;
+        boolean isRunning = true;
 
-        HashMap<Integer, String> tasks = new HashMap<>();
+        while(isRunning) {
 
-        if (menu(scanner) == 1) {
-            System.out.println("Enter a task: ");
-            String task = scanner.nextLine();
-            int position = 1;
+            System.out.println("""
+                    -------------
+                    To-Do List
+                    -------------
+                    1.Add task
+                    2.View tasks
+                    3.Update task
+                    4.Remove task
+                    5.Exit
+                    -------------
+                    """);
 
-            tasks.put(position, task);
+            System.out.print("Enter your choice (1-5): ");
 
-            // loops the user input so asks for a new task until the user ends it with "!!"
-            while (!task.equals("!!")) {
+            menuChoice = scanner.nextInt();
+            scanner.nextLine();
 
-                System.out.println("Enter a task: ");
-                task = scanner.nextLine();
-                position++;
-
-                // exits the loop once "!!" is entered
-                if (task.equals("!!")) {
-                    break;
-                }
-                // Adds tasks here so "!!" isn't included in the list
-                tasks.put(position, task);
+            switch (menuChoice) {
+                case 1 -> addTask();
+                case 2 -> printTodo();
+                case 3 -> updateTodo();
+                case 4 -> removeTodo();
+                case 5 -> isRunning = false;
+                default -> System.out.print("Please enter a number between 1 and 5");
             }
         }
-        return tasks;
+
+    }
+
+    public void addTask() {
+
+            System.out.print("Enter a task: ");
+            String task = scanner.nextLine();
+
+                if (task.isEmpty()) {
+                    System.out.println("You didn't add a task");
+                } else {
+
+                    System.out.println("Current keys: " + toDo.keySet());
+
+                    toDo.put(taskId, task);
+                    taskId++;
+                    System.out.println("Keys after loop: " + toDo.keySet());
+                }
     }
 
     // updates the to-do list from hashmap key
-    public static void updateTodo(HashMap<Integer, String> updateToDo) {
+    public void updateTodo() {
 
-        if (menu(scanner) == 2) {
-
-            printTodo(updateToDo);
+            printTodo();
 
             System.out.println("What number would you like to update?");
             int taskNumber = scanner.nextInt();
@@ -63,37 +75,33 @@ public class Handler {
             System.out.println("What do you want to replace it with?: ");
             String replacedValue = scanner.nextLine();
 
-            boolean updated = updateToDo.containsKey(taskNumber);
+            boolean updated = toDo.containsKey(taskNumber);
 
             if (updated) {
-                updateToDo.replace(taskNumber, replacedValue);
+                toDo.replace(taskNumber, replacedValue);
             }
-        }
     }
 
     // removes the to-do list item from hashmap key
-    public static void removeTodo(HashMap<Integer, String> removeToDo) {
+    public void removeTodo() {
 
-        if (menu(scanner) == 3) {
-
-            printTodo(removeToDo);
+            printTodo();
 
             System.out.println("What number would you like to remove?");
             int taskNumber = scanner.nextInt();
             scanner.nextLine();
 
-            boolean updated = removeToDo.containsKey(taskNumber);
+            boolean updated = toDo.containsKey(taskNumber);
 
             if (updated) {
-                System.out.println(removeToDo.get(taskNumber) + " has been removed");
-                removeToDo.remove(taskNumber);
-                System.out.println();
+                System.out.println("-------------");
+                System.out.println(toDo.get(taskNumber) + " has been removed");
+                toDo.remove(taskNumber);
             }
-        }
     }
 
     // prints the to-do list with numbering
-    public static void printTodo(HashMap<Integer, String> toDo) {
+    public void printTodo() {
         for (Integer i : toDo.keySet()) {
             System.out.println((i) + ". " + toDo.get(i));
         }
